@@ -6,38 +6,6 @@
 #define WINDOW_HEIGHT 600
 
 int main(int argc, char** argv) {
-	// Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
-		return 1;
-	}
-
-	// Initialize SDL_image
-	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
-		std::cerr << "Failed to initialize SDL_image: " << IMG_GetError() << std::endl;
-		SDL_Quit();
-		return 1;
-	}
-
-	// Create a window
-	SDL_Window* window = SDL_CreateWindow("GE2D", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-	if (window == nullptr) {
-		std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
-		SDL_Quit();
-		IMG_Quit();
-		return 1;
-	}
-
-	// Create a renderer for the window
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	if (renderer == nullptr) {
-		std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		IMG_Quit();
-		return 1;
-	}
-
 	// Load an image
 	SDL_Surface* tileSurface = IMG_Load("assets/dirt.png");
 	if (tileSurface == nullptr) {

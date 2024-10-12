@@ -134,7 +134,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="SurfaceBuffer.hpp" />
+    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2.dll" />
@@ -144,6 +149,13 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\dirt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.hpp" />
+    <ClInclude Include="GameObject.hpp" />
+    <ClInclude Include="Surface.hpp" />
+    <ClInclude Include="Tile.hpp" />
+    <ClInclude Include="Vector2D.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
