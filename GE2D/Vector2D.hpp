@@ -30,6 +30,8 @@ public:
 	Vector2D& operator/=(const float scalar);
 
 	float dot(const Vector2D& other) const;
+	float cross(const Vector2D& other) const;
+    Vector2D projectOnto(const Vector2D& other) const;
 
 	float magnitude() const;
 	float orientation() const;

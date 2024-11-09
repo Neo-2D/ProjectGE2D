@@ -80,6 +80,22 @@ float Vector2D::dot(const Vector2D& other) const
 	return m_x * other.m_x + m_y * other.m_y;
 }
 
+float Vector2D::cross(const Vector2D& other) const {
+	return m_x * other.m_y - m_y * other.m_x;
+}
+
+Vector2D Vector2D::projectOnto(const Vector2D& other) const
+{
+	float dotProduct = dot(other);
+	float magnitudeSquared = other.dot(other);
+
+	if (magnitudeSquared == 0) {
+		return Vector2D(0, 0);
+	}
+
+	return Vector2D(dotProduct / magnitudeSquared * other.m_x, dotProduct / magnitudeSquared * other.m_y);
+}
+
 float Vector2D::magnitude() const
 {
 	return sqrt(m_x * m_x + m_y * m_y);

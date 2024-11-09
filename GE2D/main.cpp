@@ -10,7 +10,7 @@
 
 int main(int argc, char** argv) {
 	Window window(Game::getInstance());
-	
+
 	Game::getInstance().init();
 
 	bool running = true;
@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
 	//				offsetX += event.motion.x - startingX;
 	//				offsetY += event.motion.y - startingY;
 
-	//				startingX = event.motion.x;	
+	//				startingX = event.motion.x;
 	//				startingY = event.motion.y;
 
 	//				std::cout << "offsetX: " << offsetX << ", offsetY: " << offsetY << std::endl;
@@ -124,7 +124,7 @@ int main(int argc, char** argv) {
 	//		}
 	//	}
 
-	//	// Display 
+	//	// Display
 	//	SDL_RenderPresent(renderer);
 	//}
 	//
