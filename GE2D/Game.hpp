@@ -8,15 +8,22 @@
 
 class Game : public GameObject, public SurfaceBuffer {
 private:
-	std::vector<Surface*> m_surfaceBuffer;
+	std::vector<std::unique_ptr<Surface>> m_surfaceBuffer;
 
-public:
 	Game() = default;
+public:
+	Game(const Game&) = delete;
+	Game& operator=(const Game&) = delete;
+
+	static Game& getInstance() {
+		static Game instance;
+		return instance;
+	}
 
 	void update() override;
 	void init() override;
 
-	virtual void bufferizeSurface(Surface& surface) override;
+	virtual void bufferizeSurface(std::unique_ptr<Surface>&& surface) override;
 	virtual void clearSurfaceBuffer() override;
-	virtual const std::vector<Surface*>& getSurfaceBuffer() const override;
+	virtual const std::vector<std::unique_ptr<Surface>>& getSurfaceBuffer() const override;
 };

@@ -3,10 +3,11 @@
 #include "Surface.hpp"
 
 #include <vector>
+#include <memory>
 
 class SurfaceBuffer {
 public:
-	virtual void bufferizeSurface(Surface& surface) = 0;
+	virtual void bufferizeSurface(std::unique_ptr<Surface>&&) = 0;
 	virtual void clearSurfaceBuffer() = 0;
-	virtual const std::vector<Surface*>& getSurfaceBuffer() const = 0;
+	virtual const std::vector<std::unique_ptr<Surface>>& getSurfaceBuffer() const = 0;
 };

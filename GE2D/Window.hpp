@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameObject.hpp"
+#include "SurfaceBuffer.hpp"
 
 #include <iostream>
 #include <SDL.h>
@@ -16,9 +17,14 @@ private:
 	SDL_Window* m_window = nullptr;
 	SDL_Renderer* m_renderer = nullptr;
 
+	SurfaceBuffer& m_surfaceBuffer;
 public:
+	Window(SurfaceBuffer&);
 	virtual ~Window();
 	
 	virtual void init() override;
 	virtual void update() override;
+
+	// Returns false if the window should close
+	bool handleEvents();
 };

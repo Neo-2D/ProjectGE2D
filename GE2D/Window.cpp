@@ -1,5 +1,10 @@
 #include "Window.hpp"
 
+Window::Window(SurfaceBuffer& surfaceBuffer) : m_surfaceBuffer(surfaceBuffer)
+{
+	init();
+}
+
 Window::~Window()
 {
 	if (m_sdlImageInitialized) {
@@ -44,4 +49,36 @@ void Window::init()
 	if (m_renderer == nullptr) {
 		std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
 	}
+}
+
+void Window::update() {
+	// Clear the screen (optional, based on your needs)
+	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+	SDL_RenderClear(m_renderer);
+
+	// Draw surfaces from SurfaceBuffer
+	const std::vector<std::unique_ptr<Surface>>& surfaces = m_surfaceBuffer.getSurfaceBuffer();
+	for (const auto& surface : surfaces) {
+		std::cout << surface->getPath() << std::endl;
+		// Here you'd add code to render the surfaces onto the screen
+	}
+
+	// Draw a red square
+	SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
+	SDL_Rect rect{ 100, 100, 100, 100 };
+	SDL_RenderFillRect(m_renderer, &rect);
+
+	// Present the rendered frame to the screen
+	SDL_RenderPresent(m_renderer);
+}
+
+bool Window::handleEvents()
+{
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		if (event.type == SDL_QUIT) {
+			return false;
+		}
+	}
+	return true;
 }

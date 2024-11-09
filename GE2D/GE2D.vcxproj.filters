@@ -48,6 +48,9 @@
     <ClCompile Include="SurfaceBuffer.hpp">
       <Filter>Header Files\rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2.dll" />
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="Vector2D.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.hpp">
+      <Filter>Header Files\rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
