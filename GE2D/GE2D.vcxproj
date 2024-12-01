@@ -134,8 +134,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MouseHandler.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="SurfaceBuffer.hpp" />
     <ClCompile Include="Tile.cpp" />
@@ -149,11 +151,10 @@
     <None Include="SDL2_ttf.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\dirt.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameObject.hpp" />
+    <ClInclude Include="MouseHandler.hpp" />
     <ClInclude Include="Surface.hpp" />
     <ClInclude Include="Tile.hpp" />
     <ClInclude Include="Vector2D.hpp" />

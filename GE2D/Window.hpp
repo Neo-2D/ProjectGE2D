@@ -2,6 +2,8 @@
 
 #include "GameObject.hpp"
 #include "SurfaceBuffer.hpp"
+#include "Camera.hpp"
+#include "MouseHandler.hpp"
 
 #include <iostream>
 #include <SDL.h>
@@ -9,6 +11,8 @@
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
+
+#define TILE_SIZE 16
 
 class Window : public GameObject {
 private:
@@ -18,13 +22,18 @@ private:
 	SDL_Renderer* m_renderer = nullptr;
 
 	SurfaceBuffer& m_surfaceBuffer;
+	
+	std::unique_ptr<MouseHandler> m_mouseHandler;
+
+	std::unique_ptr<Camera> m_camera;
 public:
 	Window(SurfaceBuffer&);
 	virtual ~Window();
 	
-	virtual void init() override;
-	virtual void update() override;
+	virtual bool init() override;
+	virtual bool update() override;
 
 	// Returns false if the window should close
 	bool handleEvents();
+	void handleMuoseDrag(double dx, double dy);
 };

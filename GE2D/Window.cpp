@@ -1,8 +1,10 @@
 #include "Window.hpp"
 
-Window::Window(SurfaceBuffer& surfaceBuffer) : m_surfaceBuffer(surfaceBuffer)
+Window::Window(SurfaceBuffer& surfaceBuffer) : 
+	m_surfaceBuffer(surfaceBuffer),
+	m_camera(std::make_unique<Camera>()),
+	m_mouseHandler(std::make_unique<MouseHandler>([this](double dx, double dy) { this->handleMuoseDrag(dx, dy); }))
 {
-	init();
 }
 
 Window::~Window()
@@ -24,17 +26,19 @@ Window::~Window()
 	}
 }
 
-void Window::init()
+bool Window::init()
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
+		return false;
 	}
 	m_sdlInitialized = true;
 
 	// Initialize SDL_image
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
 		std::cerr << "Failed to initialize SDL_image: " << IMG_GetError() << std::endl;
+		return false;
 	}
 	m_sdlImageInitialized = true;
 
@@ -42,16 +46,20 @@ void Window::init()
 	m_window = SDL_CreateWindow("GE2D", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	if (m_window == nullptr) {
 		std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
+		return false;
 	}
 
 	// Create a renderer for the window
 	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
 	if (m_renderer == nullptr) {
 		std::cerr << "Failed to create renderer: " << SDL_GetError() << std::endl;
+		return false;
 	}
+
+	return true;
 }
 
-void Window::update() {
+bool Window::update() {
 	// Clear the screen (optional, based on your needs)
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_renderer);
@@ -59,17 +67,36 @@ void Window::update() {
 	// Draw surfaces from SurfaceBuffer
 	const std::vector<std::unique_ptr<Surface>>& surfaces = m_surfaceBuffer.getSurfaceBuffer();
 	for (const auto& surface : surfaces) {
-		std::cout << surface->getPath() << std::endl;
-		// Here you'd add code to render the surfaces onto the screen
-	}
+		// Create a texture from the image
+		SDL_Surface* sdlSurface = IMG_Load(surface->getPath().c_str());
+		if (sdlSurface == nullptr) {
+			std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
+			return false;
+		}
 
-	// Draw a red square
-	SDL_SetRenderDrawColor(m_renderer, 255, 0, 0, 255);
-	SDL_Rect rect{ 100, 100, 100, 100 };
-	SDL_RenderFillRect(m_renderer, &rect);
+		SDL_Texture* sdlTexture = SDL_CreateTextureFromSurface(m_renderer, sdlSurface);
+		SDL_FreeSurface(sdlSurface);
+		if (!sdlTexture) {
+			std::cerr << "Failed to create texture: " << SDL_GetError() << std::endl;
+			return false;
+		}
+
+		double zoomFactor = m_camera->getZoom() / 16.0f + 1;
+
+		SDL_Rect rect{ 
+			static_cast<int>(surface->getX() * TILE_SIZE * zoomFactor), 
+			static_cast<int>(surface->getY() * TILE_SIZE * zoomFactor),
+			static_cast<int>(surface->getBaseWidth() * TILE_SIZE * zoomFactor),
+			static_cast<int>(surface->getBaseHeight() * TILE_SIZE * zoomFactor)
+		};
+		SDL_RenderCopy(m_renderer, sdlTexture, nullptr, &rect);
+		SDL_DestroyTexture(sdlTexture);
+	}
 
 	// Present the rendered frame to the screen
 	SDL_RenderPresent(m_renderer);
+
+	return true;
 }
 
 bool Window::handleEvents()
@@ -79,6 +106,29 @@ bool Window::handleEvents()
 		if (event.type == SDL_QUIT) {
 			return false;
 		}
+		else if (event.type == SDL_MOUSEWHEEL) {
+			bool zoomIn = event.wheel.y > 0;
+			if (zoomIn) {
+				m_camera->zoomIn();
+			}
+			else {
+				m_camera->zoomOut();
+			}
+			std::cout << "Zoom: " << m_camera->getZoom() << std::endl;
+		}
+		else if (event.type == SDL_MOUSEBUTTONDOWN) {
+			m_mouseHandler->handleMouseButtonDown(event);
+		}
+		else if (event.type == SDL_MOUSEBUTTONUP) {
+			m_mouseHandler->handleMouseButtonUp(event);
+		}
+		else if (event.type == SDL_MOUSEMOTION) {
+			m_mouseHandler->handleMouseMotion(event);
+		}
 	}
 	return true;
+}
+
+void Window::handleMuoseDrag(double dx, double dy) {
+	std::cout << "Mouse drag: " << dx << ", " << dy << std::endl;
 }

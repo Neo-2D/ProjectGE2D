@@ -20,8 +20,8 @@ public:
 		return instance;
 	}
 
-	void update() override;
-	void init() override;
+	bool update() override;
+	bool init() override;
 
 	virtual void bufferizeSurface(std::unique_ptr<Surface>&& surface) override;
 	virtual void clearSurfaceBuffer() override;
