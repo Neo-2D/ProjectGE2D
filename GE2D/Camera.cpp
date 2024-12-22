@@ -26,3 +26,23 @@ void Camera::zoomOut()
 		m_zoom--;
 	}
 }
+
+void Camera::moveUp()
+{
+    m_center += Vector2D(0, 1);
+}
+
+void Camera::moveDown()
+{
+    m_center += Vector2D(0, -1);
+}
+
+void Camera::moveLeft()
+{
+    m_center += Vector2D(-1, 0);
+}
+
+void Camera::moveRight()
+{
+    m_center += Vector2D(1, 0);
+}

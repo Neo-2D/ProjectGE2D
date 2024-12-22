@@ -1,8 +1,10 @@
 #pragma once
+#include "Vector2D.hpp"
 
 class Camera {
 private:
 	int m_zoom;
+	Vector2D m_center = { 0, 0 };
 
 public:
 	Camera();
@@ -11,4 +13,11 @@ public:
 	void setZoom(int zoom);
 	void zoomIn();
 	void zoomOut();
+
+    void moveUp();
+    void moveDown();
+    void moveLeft();
+    void moveRight();
+
+    const Vector2D& getCenter() const { return m_center; }
 };

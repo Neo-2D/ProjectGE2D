@@ -3,7 +3,7 @@
 Window::Window(SurfaceBuffer& surfaceBuffer) : 
 	m_surfaceBuffer(surfaceBuffer),
 	m_camera(std::make_unique<Camera>()),
-	m_mouseHandler(std::make_unique<MouseHandler>([this](double dx, double dy) { this->handleMuoseDrag(dx, dy); }))
+	m_mouseHandler(std::make_unique<MouseHandler>([this](double dx, double dy) { this->handleMouseDrag(dx, dy); }))
 {
 }
 
@@ -43,7 +43,7 @@ bool Window::init()
 	m_sdlImageInitialized = true;
 
 	// Create a window
-	m_window = SDL_CreateWindow("GE2D", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	m_window = SDL_CreateWindow("GE2D", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	if (m_window == nullptr) {
 		std::cerr << "Failed to create window: " << SDL_GetError() << std::endl;
 		return false;
@@ -60,9 +60,17 @@ bool Window::init()
 }
 
 bool Window::update() {
+	int windowWidth = 0, windowHeight = 0;
+	SDL_GetWindowSize(m_window, &windowWidth, &windowHeight);
+
 	// Clear the screen (optional, based on your needs)
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_renderer);
+
+	// Calculate the offsets to center the content on the screen
+	double zoomFactor = m_camera->getZoom() / 16.0f + 1;
+	int offsetX = static_cast<int>((windowWidth - (TILE_SIZE * zoomFactor)) / 2);
+	int offsetY = static_cast<int>((windowHeight - (TILE_SIZE * zoomFactor)) / 2);
 
 	// Draw surfaces from SurfaceBuffer
 	const std::vector<std::unique_ptr<Surface>>& surfaces = m_surfaceBuffer.getSurfaceBuffer();
@@ -81,11 +89,9 @@ bool Window::update() {
 			return false;
 		}
 
-		double zoomFactor = m_camera->getZoom() / 16.0f + 1;
-
-		SDL_Rect rect{ 
-			static_cast<int>(surface->getX() * TILE_SIZE * zoomFactor), 
-			static_cast<int>(surface->getY() * TILE_SIZE * zoomFactor),
+		SDL_Rect rect{
+			static_cast<int>(surface->getX() * TILE_SIZE * zoomFactor) + offsetX,
+			static_cast<int>(surface->getY() * TILE_SIZE * zoomFactor) + offsetY,
 			static_cast<int>(surface->getBaseWidth() * TILE_SIZE * zoomFactor),
 			static_cast<int>(surface->getBaseHeight() * TILE_SIZE * zoomFactor)
 		};
@@ -125,10 +131,39 @@ bool Window::handleEvents()
 		else if (event.type == SDL_MOUSEMOTION) {
 			m_mouseHandler->handleMouseMotion(event);
 		}
+
+		const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
+
+		// Check for continuous key presses
+        bool keyPress = false;
+		if (currentKeyStates[SDL_SCANCODE_W]) {
+			m_camera->moveUp();
+            keyPress = true;
+		}
+
+		if (currentKeyStates[SDL_SCANCODE_S]) {
+			m_camera->moveDown();
+            keyPress = true;
+		}
+
+		if (currentKeyStates[SDL_SCANCODE_A]) {
+            m_camera->moveLeft();
+            keyPress = true;
+		}
+
+		if (currentKeyStates[SDL_SCANCODE_D]) {
+            m_camera->moveRight();
+            keyPress = true;
+		}
+
+		// Output the camera center
+        if (keyPress) {
+            std::cout << "Camera center: " << m_camera->getCenter().x << ", " << m_camera->getCenter().y << std::endl;
+        }
 	}
 	return true;
 }
 
-void Window::handleMuoseDrag(double dx, double dy) {
+void Window::handleMouseDrag(double dx, double dy) {
 	std::cout << "Mouse drag: " << dx << ", " << dy << std::endl;
 }

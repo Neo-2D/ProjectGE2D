@@ -35,5 +35,5 @@ public:
 
 	// Returns false if the window should close
 	bool handleEvents();
-	void handleMuoseDrag(double dx, double dy);
+	void handleMouseDrag(double dx, double dy);
 };

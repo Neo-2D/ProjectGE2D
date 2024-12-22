@@ -13,8 +13,8 @@ int getRandomNumber(int min, int max)
 
 bool Game::init()
 {	
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
+	for (int i = -16; i < 16; i++) {
+		for (int j = -16; j < 16; j++) {
 			if ((i + j) % 2 == 0) {
 				std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/dirt.png", 1, 1, i, j);
 				bufferizeSurface(std::move(s));

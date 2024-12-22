@@ -4,16 +4,13 @@
 
 class Vector2D {
 private:
-	float m_x;
-	float m_y;
+	
 
 public:
-	Vector2D(float x, float y);
+	float x;
+	float y;
 
-	float getX() const;
-	float getY() const;
-	void setX(float x);
-	void setY(float y);
+	Vector2D(float x, float y);
 
 	Vector2D operator+(const Vector2D& other) const;
 	Vector2D operator-(const Vector2D& other) const;

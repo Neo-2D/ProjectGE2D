@@ -1,88 +1,68 @@
 #include "Vector2D.hpp"
 
 
-Vector2D::Vector2D(float x, float y) : m_x(x), m_y(y) {}
-
-float Vector2D::getX() const
-{
-	return m_x;
-}
-
-float Vector2D::getY() const
-{
-	return m_y;
-}
-
-void Vector2D::setX(float x)
-{
-	m_x = x;
-}
-
-void Vector2D::setY(float y)
-{
-	m_y = y;
-}
+Vector2D::Vector2D(float x, float y) : x(x), y(y) {}
 
 Vector2D Vector2D::operator+(const Vector2D& other) const
 {
-	return Vector2D(m_x + other.m_x, m_y + other.m_y);
+	return Vector2D(x + other.x, y + other.y);
 }
 
 Vector2D Vector2D::operator-(const Vector2D& other) const
 {
-	return Vector2D(m_x - other.m_x, m_y - other.m_y);
+	return Vector2D(x - other.x, y - other.y);
 }
 
 Vector2D Vector2D::operator*(const float scalar) const
 {
-	return Vector2D(m_x * scalar, m_y * scalar);
+	return Vector2D(x * scalar, y * scalar);
 }
 
 Vector2D Vector2D::operator/(const float scalar) const
 {
-	return Vector2D(m_x / scalar, m_y / scalar);
+	return Vector2D(x / scalar, y / scalar);
 }
 
 bool Vector2D::equals(const Vector2D& other) const
 {
-	return m_x == other.m_x && m_y == other.m_y;
+	return x == other.x && y == other.y;
 }
 
 Vector2D& Vector2D::operator+=(const Vector2D& other)
 {
-	m_x += other.m_x;
-	m_y += other.m_y;
+	x += other.x;
+	y += other.y;
 	return *this;
 }
 
 Vector2D& Vector2D::operator-=(const Vector2D& other)
 {
-	m_x -= other.m_x;
-	m_y -= other.m_y;
+	x -= other.x;
+	y -= other.y;
 	return *this;
 }
 
 Vector2D& Vector2D::operator*=(const float scalar)
 {
-	m_x *= scalar;
-	m_y *= scalar;
+	x *= scalar;
+	y *= scalar;
 	return *this;
 }
 
 Vector2D& Vector2D::operator/=(const float scalar)
 {
-	m_x /= scalar;
-	m_y /= scalar;
+	x /= scalar;
+	y /= scalar;
 	return *this;
 }
 
 float Vector2D::dot(const Vector2D& other) const
 {
-	return m_x * other.m_x + m_y * other.m_y;
+	return x * other.x + y * other.y;
 }
 
 float Vector2D::cross(const Vector2D& other) const {
-	return m_x * other.m_y - m_y * other.m_x;
+	return x * other.y - y * other.x;
 }
 
 Vector2D Vector2D::projectOnto(const Vector2D& other) const
@@ -94,17 +74,17 @@ Vector2D Vector2D::projectOnto(const Vector2D& other) const
 		return Vector2D(0, 0);
 	}
 
-	return Vector2D(dotProduct / magnitudeSquared * other.m_x, dotProduct / magnitudeSquared * other.m_y);
+	return Vector2D(dotProduct / magnitudeSquared * other.x, dotProduct / magnitudeSquared * other.y);
 }
 
 float Vector2D::magnitude() const
 {
-	return sqrt(m_x * m_x + m_y * m_y);
+	return sqrt(x * x + y * y);
 }
 
 float Vector2D::orientation() const
 {
-	return atan2(m_y, m_x);
+	return atan2(y, x);
 }
 
 Vector2D Vector2D::normalize() const
@@ -116,12 +96,12 @@ Vector2D Vector2D::normalize() const
 		return Vector2D(0, 0);
 	}
 
-	return Vector2D(m_x / mag, m_y / mag);
+	return Vector2D(x / mag, y / mag);
 }
 
 Vector2D Vector2D::rotate(float angle) const
 {
 	float cosAngle = cos(angle);
 	float sinAngle = sin(angle);
-	return Vector2D(m_x * cosAngle - m_y * sinAngle, m_x * sinAngle + m_y * cosAngle);
+	return Vector2D(x * cosAngle - y * sinAngle, x * sinAngle + y * cosAngle);
 }
