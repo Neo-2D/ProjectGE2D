@@ -60,17 +60,14 @@ bool Window::init()
 }
 
 bool Window::update() {
-	int windowWidth = 0, windowHeight = 0;
-	SDL_GetWindowSize(m_window, &windowWidth, &windowHeight);
-
 	// Clear the screen (optional, based on your needs)
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_renderer);
 
 	// Calculate the offsets to center the content on the screen
 	double zoomFactor = m_camera->getZoom() / 16.0f + 1;
-	int offsetX = static_cast<int>((windowWidth - (TILE_SIZE * zoomFactor)) / 2);
-	int offsetY = static_cast<int>((windowHeight - (TILE_SIZE * zoomFactor)) / 2);
+	int offsetX = static_cast<int>((m_windowWidth - (TILE_SIZE * zoomFactor)) / 2);
+	int offsetY = static_cast<int>((m_windowHeight - (TILE_SIZE * zoomFactor)) / 2);
 
 	// Draw surfaces from SurfaceBuffer
 	const std::vector<std::unique_ptr<Surface>>& surfaces = m_surfaceBuffer.getSurfaceBuffer();
@@ -131,6 +128,19 @@ bool Window::handleEvents()
 		else if (event.type == SDL_MOUSEMOTION) {
 			m_mouseHandler->handleMouseMotion(event);
 		}
+
+        if (event.type == SDL_WINDOWEVENT) {
+            if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                m_windowWidth = event.window.data1;
+                m_windowHeight = event.window.data2;
+				SDL_Rect viewport;
+				viewport.x = 0;
+				viewport.y = 0;
+				viewport.w = m_windowWidth;  // Use updated width
+				viewport.h = m_windowHeight; // Use updated height
+				SDL_RenderSetViewport(m_renderer, &viewport);
+            }
+        }
 
 		const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
 

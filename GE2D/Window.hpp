@@ -21,6 +21,9 @@ private:
 	SDL_Window* m_window = nullptr;
 	SDL_Renderer* m_renderer = nullptr;
 
+    float m_windowWidth = WINDOW_WIDTH;
+    float m_windowHeight = WINDOW_HEIGHT;
+
 	SurfaceBuffer& m_surfaceBuffer;
 	
 	std::unique_ptr<MouseHandler> m_mouseHandler;
