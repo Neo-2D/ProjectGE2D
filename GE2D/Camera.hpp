@@ -18,6 +18,7 @@ public:
     void moveDown();
     void moveLeft();
     void moveRight();
+    void moveCenter(double deltaX, double deltaY);
 
     const Vector2D& getCenter() const { return m_center; }
 };

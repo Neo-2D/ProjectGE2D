@@ -29,12 +29,12 @@ void Camera::zoomOut()
 
 void Camera::moveUp()
 {
-    m_center += Vector2D(0, 1);
+    m_center += Vector2D(0, -1);
 }
 
 void Camera::moveDown()
 {
-    m_center += Vector2D(0, -1);
+    m_center += Vector2D(0, 1);
 }
 
 void Camera::moveLeft()
@@ -45,4 +45,8 @@ void Camera::moveLeft()
 void Camera::moveRight()
 {
     m_center += Vector2D(1, 0);
+}
+
+void Camera::moveCenter(double deltaX, double deltaY) {
+    m_center += Vector2D(deltaX * 0.1, deltaY * 0.1);
 }

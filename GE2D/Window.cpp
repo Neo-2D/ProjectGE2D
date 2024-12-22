@@ -66,12 +66,26 @@ bool Window::update() {
 
 	// Calculate the offsets to center the content on the screen
 	double zoomFactor = m_camera->getZoom() / 16.0f + 1;
+    Vector2D center = m_camera->getCenter();
 	int offsetX = static_cast<int>((m_windowWidth - (TILE_SIZE * zoomFactor)) / 2);
 	int offsetY = static_cast<int>((m_windowHeight - (TILE_SIZE * zoomFactor)) / 2);
 
 	// Draw surfaces from SurfaceBuffer
 	const std::vector<std::unique_ptr<Surface>>& surfaces = m_surfaceBuffer.getSurfaceBuffer();
 	for (const auto& surface : surfaces) {
+		if (surface->getX() > m_camera->getCenter().x + 10) {
+			continue;
+        }
+        else if (surface->getX() < m_camera->getCenter().x - 10) {
+			continue;
+        }
+        else if (surface->getY() > m_camera->getCenter().y + 10) {
+			continue;
+        }
+        else if (surface->getY() < m_camera->getCenter().y - 10) {
+			continue;
+        }
+		
 		// Create a texture from the image
 		SDL_Surface* sdlSurface = IMG_Load(surface->getPath().c_str());
 		if (sdlSurface == nullptr) {
@@ -134,11 +148,6 @@ bool Window::handleEvents()
                 m_windowWidth = event.window.data1;
                 m_windowHeight = event.window.data2;
 				SDL_Rect viewport;
-				viewport.x = 0;
-				viewport.y = 0;
-				viewport.w = m_windowWidth;  // Use updated width
-				viewport.h = m_windowHeight; // Use updated height
-				SDL_RenderSetViewport(m_renderer, &viewport);
             }
         }
 
@@ -176,4 +185,5 @@ bool Window::handleEvents()
 
 void Window::handleMouseDrag(double dx, double dy) {
 	std::cout << "Mouse drag: " << dx << ", " << dy << std::endl;
+    m_camera->moveCenter(dx, dy);
 }
