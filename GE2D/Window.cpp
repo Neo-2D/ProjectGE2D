@@ -57,7 +57,31 @@ bool Window::init()
 		return false;
 	}
 
+    loadTextures();
+
 	return true;
+}
+
+void Window::loadTextures() {
+    m_textureCache.clear();
+	const auto& surfaces = m_surfaceBuffer.getSurfaceBuffer();
+	for (const auto& surface : surfaces) {
+		const std::string& path = surface->getPath();
+		if (m_textureCache.find(path) == m_textureCache.end()) {
+			SDL_Surface* sdlSurface = IMG_Load(path.c_str());
+			if (!sdlSurface) {
+				std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
+				continue;
+			}
+			SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, sdlSurface);
+			SDL_FreeSurface(sdlSurface);
+			if (!texture) {
+				std::cerr << "Failed to create texture: " << SDL_GetError() << std::endl;
+				continue;
+			}
+			m_textureCache[path] = texture;
+		}
+	}
 }
 
 bool Window::update() {
@@ -76,7 +100,7 @@ bool Window::update() {
 	for (const auto& surface : surfaces) {
 		
 		// Create a texture from the image
-		SDL_Surface* sdlSurface = IMG_Load(surface->getPath().c_str());
+		/*SDL_Surface* sdlSurface = IMG_Load(surface->getPath().c_str());
 		if (sdlSurface == nullptr) {
 			std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
 			return false;
@@ -87,7 +111,13 @@ bool Window::update() {
 		if (!sdlTexture) {
 			std::cerr << "Failed to create texture: " << SDL_GetError() << std::endl;
 			return false;
-		}
+		}*/
+
+        SDL_Texture* sdlTexture = m_textureCache[surface->getPath()];
+        if (!sdlTexture) {
+            std::cerr << "Failed to get texture from cache" << std::endl;
+            return false;
+        }
 
 		SDL_Rect rect{
 			static_cast<int>(surface->getX() * TILE_SIZE * zoomFactor) + offsetX,
@@ -96,7 +126,7 @@ bool Window::update() {
 			static_cast<int>(surface->getBaseHeight() * TILE_SIZE * zoomFactor)
 		};
 		SDL_RenderCopy(m_renderer, sdlTexture, nullptr, &rect);
-		SDL_DestroyTexture(sdlTexture);
+		//SDL_DestroyTexture(sdlTexture);
 	}
 
 	// Present the rendered frame to the screen
@@ -144,6 +174,7 @@ bool Window::handleEvents()
 		if (event.type == SDL_KEYDOWN) {
 			if (event.key.keysym.sym == SDLK_g) {
 				levelLoader.loadLevel("testLevel");
+                loadTextures();
 			}
 		}
 	}

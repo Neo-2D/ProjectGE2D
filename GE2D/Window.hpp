@@ -8,6 +8,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <unordered_map>
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -25,6 +26,7 @@ private:
     int m_windowHeight = WINDOW_HEIGHT;
 
 	SurfaceBuffer& m_surfaceBuffer;
+	std::unordered_map<std::string, SDL_Texture*> m_textureCache;
 	
 	std::unique_ptr<MouseHandler> m_mouseHandler;
 
@@ -35,6 +37,7 @@ public:
 	
 	virtual bool init() override;
 	virtual bool update() override;
+    void loadTextures();
 
 	// Returns false if the window should close
 	bool handleEvents();
