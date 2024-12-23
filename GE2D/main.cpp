@@ -24,19 +24,7 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-    LevelLoader::loadLevel("testLevel");
-
 	while (true) {
-		//if press g then load level
-        /*SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_KEYDOWN) {
-                if (event.key.keysym.sym == SDLK_g) {
-                    levelLoader.loadLevel("testLevel");
-                }
-            }
-        }*/
-
 		bool eventHandled = window.handleEvents();
 		if (!eventHandled) {
 			break;

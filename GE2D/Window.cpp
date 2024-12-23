@@ -1,4 +1,5 @@
 #include "Window.hpp"
+#include "LevelLoader.hpp"
 
 Window::Window(SurfaceBuffer& surfaceBuffer) : 
 	m_surfaceBuffer(surfaceBuffer),
@@ -67,15 +68,12 @@ bool Window::update() {
 	// Calculate the offsets to center the content on the screen
 	double zoomFactor = m_camera->getZoom() / 16.0f + 1;
     Vector2D center = m_camera->getCenter();
-	int offsetX = static_cast<int>((m_windowWidth - (TILE_SIZE * zoomFactor)) / 2);
-	int offsetY = static_cast<int>((m_windowHeight - (TILE_SIZE * zoomFactor)) / 2);
+	int offsetX = static_cast<int>(m_camera->getCenter().x * TILE_SIZE * zoomFactor + m_windowWidth / 2);
+	int offsetY = static_cast<int>(m_camera->getCenter().y * TILE_SIZE * zoomFactor + m_windowHeight / 2);
 
 	// Draw surfaces from SurfaceBuffer
 	const std::vector<std::unique_ptr<Surface>>& surfaces = m_surfaceBuffer.getSurfaceBuffer();
 	for (const auto& surface : surfaces) {
-        /*if (checkCameraBoundsForRenderArea(*surface)) {
-            continue;
-        }*/
 		
 		// Create a texture from the image
 		SDL_Surface* sdlSurface = IMG_Load(surface->getPath().c_str());
@@ -107,15 +105,10 @@ bool Window::update() {
 	return true;
 }
 
-bool Window::checkCameraBoundsForRenderArea(const Surface& surface) {
-	return surface.getX() > m_camera->getCenter().x + m_camera->getRenderAreaSize() ||
-		surface.getX() < m_camera->getCenter().x - m_camera->getRenderAreaSize() ||
-		surface.getY() > m_camera->getCenter().y + m_camera->getRenderAreaSize() ||
-		surface.getY() < m_camera->getCenter().y - m_camera->getRenderAreaSize();
-}
-
 bool Window::handleEvents()
 {
+    LevelLoader levelLoader;
+
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
 		if (event.type == SDL_QUIT) {
@@ -148,20 +141,19 @@ bool Window::handleEvents()
             }
         }
 
-		const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
-
-        if (currentKeyStates[SDL_SCANCODE_UP]) {
-            m_camera->setRenderAreaSize(m_camera->getRenderAreaSize() + 1);
-        }
-
-        if (currentKeyStates[SDL_SCANCODE_DOWN]) {
-            m_camera->setRenderAreaSize(m_camera->getRenderAreaSize() - 1);
-        }
+		if (event.type == SDL_KEYDOWN) {
+			if (event.key.keysym.sym == SDLK_g) {
+				levelLoader.loadLevel("testLevel");
+			}
+		}
 	}
 	return true;
 }
 
 void Window::handleMouseDrag(double dx, double dy) {
 	std::cout << "Mouse drag: " << dx << ", " << dy << std::endl;
-    m_camera->moveCenter(dx, dy);
+	m_camera->setCenter(
+		{ float(m_camera->getCenter().x + dx / (TILE_SIZE)),
+		float(m_camera->getCenter().y + dy / (TILE_SIZE)) }
+	);
 }

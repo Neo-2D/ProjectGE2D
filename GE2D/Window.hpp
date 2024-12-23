@@ -39,6 +39,4 @@ public:
 	// Returns false if the window should close
 	bool handleEvents();
 	void handleMouseDrag(double dx, double dy);
-
-    bool checkCameraBoundsForRenderArea(const Surface& surface);
 };
