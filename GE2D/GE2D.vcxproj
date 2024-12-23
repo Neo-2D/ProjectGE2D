@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MouseHandler.cpp" />
     <ClCompile Include="Surface.cpp" />
@@ -154,11 +155,16 @@
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameObject.hpp" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="LevelLoader.hpp" />
     <ClInclude Include="MouseHandler.hpp" />
     <ClInclude Include="Surface.hpp" />
     <ClInclude Include="Tile.hpp" />
     <ClInclude Include="Vector2D.hpp" />
     <ClInclude Include="Window.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\dirt.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

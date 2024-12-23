@@ -21,8 +21,8 @@ private:
 	SDL_Window* m_window = nullptr;
 	SDL_Renderer* m_renderer = nullptr;
 
-    float m_windowWidth = WINDOW_WIDTH;
-    float m_windowHeight = WINDOW_HEIGHT;
+    int m_windowWidth = WINDOW_WIDTH;
+    int m_windowHeight = WINDOW_HEIGHT;
 
 	SurfaceBuffer& m_surfaceBuffer;
 	
@@ -39,4 +39,6 @@ public:
 	// Returns false if the window should close
 	bool handleEvents();
 	void handleMouseDrag(double dx, double dy);
+
+    bool checkCameraBoundsForRenderArea(const Surface& surface);
 };

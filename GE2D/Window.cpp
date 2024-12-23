@@ -73,18 +73,9 @@ bool Window::update() {
 	// Draw surfaces from SurfaceBuffer
 	const std::vector<std::unique_ptr<Surface>>& surfaces = m_surfaceBuffer.getSurfaceBuffer();
 	for (const auto& surface : surfaces) {
-		if (surface->getX() > m_camera->getCenter().x + 10) {
-			continue;
-        }
-        else if (surface->getX() < m_camera->getCenter().x - 10) {
-			continue;
-        }
-        else if (surface->getY() > m_camera->getCenter().y + 10) {
-			continue;
-        }
-        else if (surface->getY() < m_camera->getCenter().y - 10) {
-			continue;
-        }
+        /*if (checkCameraBoundsForRenderArea(*surface)) {
+            continue;
+        }*/
 		
 		// Create a texture from the image
 		SDL_Surface* sdlSurface = IMG_Load(surface->getPath().c_str());
@@ -114,6 +105,13 @@ bool Window::update() {
 	SDL_RenderPresent(m_renderer);
 
 	return true;
+}
+
+bool Window::checkCameraBoundsForRenderArea(const Surface& surface) {
+	return surface.getX() > m_camera->getCenter().x + m_camera->getRenderAreaSize() ||
+		surface.getX() < m_camera->getCenter().x - m_camera->getRenderAreaSize() ||
+		surface.getY() > m_camera->getCenter().y + m_camera->getRenderAreaSize() ||
+		surface.getY() < m_camera->getCenter().y - m_camera->getRenderAreaSize();
 }
 
 bool Window::handleEvents()
@@ -147,37 +145,17 @@ bool Window::handleEvents()
             if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
                 m_windowWidth = event.window.data1;
                 m_windowHeight = event.window.data2;
-				SDL_Rect viewport;
             }
         }
 
 		const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
 
-		// Check for continuous key presses
-        bool keyPress = false;
-		if (currentKeyStates[SDL_SCANCODE_W]) {
-			m_camera->moveUp();
-            keyPress = true;
-		}
+        if (currentKeyStates[SDL_SCANCODE_UP]) {
+            m_camera->setRenderAreaSize(m_camera->getRenderAreaSize() + 1);
+        }
 
-		if (currentKeyStates[SDL_SCANCODE_S]) {
-			m_camera->moveDown();
-            keyPress = true;
-		}
-
-		if (currentKeyStates[SDL_SCANCODE_A]) {
-            m_camera->moveLeft();
-            keyPress = true;
-		}
-
-		if (currentKeyStates[SDL_SCANCODE_D]) {
-            m_camera->moveRight();
-            keyPress = true;
-		}
-
-		// Output the camera center
-        if (keyPress) {
-            std::cout << "Camera center: " << m_camera->getCenter().x << ", " << m_camera->getCenter().y << std::endl;
+        if (currentKeyStates[SDL_SCANCODE_DOWN]) {
+            m_camera->setRenderAreaSize(m_camera->getRenderAreaSize() - 1);
         }
 	}
 	return true;

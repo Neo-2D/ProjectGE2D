@@ -48,5 +48,8 @@ void Camera::moveRight()
 }
 
 void Camera::moveCenter(double deltaX, double deltaY) {
-    m_center += Vector2D(deltaX * 0.1, deltaY * 0.1);
+    /*Very sus logic there must be something better.Need to combine zoom factor with
+	  mouse movement (that needs to be changed because otherwise it's too fast)*/
+    float moveFactor = m_zoom > 5 ? 0.5 : 0.05;
+	m_center += Vector2D(deltaX / (m_zoom / moveFactor), deltaY / (m_zoom / moveFactor));
 }
