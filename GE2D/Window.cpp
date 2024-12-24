@@ -152,8 +152,8 @@ bool Window::handleEvents()
 				int adjustedX = event.button.x - offsetX;
 				int adjustedY = event.button.y - offsetY;
 
-				int snappedX = static_cast<int>(std::floor(adjustedX / 16.0));
-				int snappedY = static_cast<int>(std::floor(adjustedY / 16.0));
+				int snappedX = static_cast<int>(std::floor(adjustedX / (16.0 * zoomFactor)));
+				int snappedY = static_cast<int>(std::floor(adjustedY / (16.0 * zoomFactor)));
 
 				std::cout << "Mouse click at: " << adjustedX << ", " << adjustedY << std::endl;
 				std::cout << "Mouse click snapped to tile: " << snappedX << ", " << snappedY << std::endl;
