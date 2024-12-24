@@ -4,7 +4,8 @@
 Window::Window(SurfaceBuffer& surfaceBuffer) : 
 	m_surfaceBuffer(surfaceBuffer),
 	m_camera(std::make_unique<Camera>()),
-	m_mouseHandler(std::make_unique<MouseHandler>([this](double dx, double dy) { this->handleMouseDrag(dx, dy); }))
+	m_mouseHandler(std::make_unique<MouseHandler>([this](double dx, double dy) { this->handleMouseDrag(dx, dy); })),
+    m_eventHandler(std::make_unique<EventHandler>(*this, *m_camera, *m_mouseHandler))
 {
 }
 
@@ -120,73 +121,17 @@ bool Window::update() {
 	return true;
 }
 
+bool mouseHeldDown = false;
+
 bool Window::handleEvents()
 {
-    LevelLoader levelLoader;
-
-	double zoomFactor = m_camera->getZoom();
-	Vector2D center = m_camera->getCenter();
-	int offsetX = static_cast<int>(m_camera->getCenter().x * TILE_SIZE * zoomFactor + m_windowWidth / 2);
-	int offsetY = static_cast<int>(m_camera->getCenter().y * TILE_SIZE * zoomFactor + m_windowHeight / 2);
-
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT) {
+		if (!m_eventHandler->handleEvent(event)) {
 			return false;
 		}
-		else if (event.type == SDL_MOUSEWHEEL) {
-			bool zoomIn = event.wheel.y > 0;
-			if (zoomIn) {
-				m_camera->zoomIn();
-			}
-			else {
-				m_camera->zoomOut();
-			}
-			std::cout << "Zoom: " << m_camera->getZoom() << std::endl;
-		}
-		else if (event.type == SDL_MOUSEBUTTONDOWN) {
-			if (event.button.button == SDL_BUTTON_MIDDLE)
-				m_mouseHandler->handleMouseButtonDown(event);
-            else if (event.button.button == SDL_BUTTON_LEFT) {
-                // Testing Code for adding a texture to the texture buffer with a mouse click
-				int adjustedX = event.button.x - offsetX;
-				int adjustedY = event.button.y - offsetY;
-
-				int snappedX = static_cast<int>(std::floor(adjustedX / (16.0 * zoomFactor)));
-				int snappedY = static_cast<int>(std::floor(adjustedY / (16.0 * zoomFactor)));
-
-				std::cout << "Mouse click at: " << adjustedX << ", " << adjustedY << std::endl;
-				std::cout << "Mouse click snapped to tile: " << snappedX << ", " << snappedY << std::endl;
-
-				std::string type = "dirt";
-
-				std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/" + type + ".png", 1, 1, snappedX, snappedY);
-                Game::getInstance().bufferizeSurface(std::move(s));
-                loadTextures();
-            }
-		}
-		else if (event.type == SDL_MOUSEBUTTONUP) {
-			if (event.button.button == SDL_BUTTON_MIDDLE)
-				m_mouseHandler->handleMouseButtonUp(event);
-		}
-		else if (event.type == SDL_MOUSEMOTION) {
-			m_mouseHandler->handleMouseMotion(event);
-		}
-
-        if (event.type == SDL_WINDOWEVENT) {
-            if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-                m_windowWidth = event.window.data1;
-                m_windowHeight = event.window.data2;
-            }
-        }
-
-		if (event.type == SDL_KEYDOWN) {
-			if (event.key.keysym.sym == SDLK_g) {
-				levelLoader.loadLevel("testLevel2");
-                loadTextures();
-			}
-		}
 	}
+
 	return true;
 }
 
