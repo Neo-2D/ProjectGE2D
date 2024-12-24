@@ -25,7 +25,6 @@ int main(int argc, char** argv) {
 	}
 
 	while (true) {
-		std::cout << "bingbong" << std::endl;
 		bool eventHandled = window.handleEvents();
 		if (!eventHandled) {
 			break;

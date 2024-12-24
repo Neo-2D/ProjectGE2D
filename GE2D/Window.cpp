@@ -90,7 +90,8 @@ bool Window::update() {
 	SDL_RenderClear(m_renderer);
 
 	// Calculate the offsets to center the content on the screen
-	double zoomFactor = m_camera->getZoom() / 16.0f + 1;
+	//double zoomFactor = m_camera->getZoom() / 16.0f + 1;
+	double zoomFactor = m_camera->getZoom();
     Vector2D center = m_camera->getCenter();
 	int offsetX = static_cast<int>(m_camera->getCenter().x * TILE_SIZE * zoomFactor + m_windowWidth / 2);
 	int offsetY = static_cast<int>(m_camera->getCenter().y * TILE_SIZE * zoomFactor + m_windowHeight / 2);
@@ -98,21 +99,6 @@ bool Window::update() {
 	// Draw surfaces from SurfaceBuffer
 	const std::vector<std::unique_ptr<Surface>>& surfaces = m_surfaceBuffer.getSurfaceBuffer();
 	for (const auto& surface : surfaces) {
-		
-		// Create a texture from the image
-		/*SDL_Surface* sdlSurface = IMG_Load(surface->getPath().c_str());
-		if (sdlSurface == nullptr) {
-			std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
-			return false;
-		}
-
-		SDL_Texture* sdlTexture = SDL_CreateTextureFromSurface(m_renderer, sdlSurface);
-		SDL_FreeSurface(sdlSurface);
-		if (!sdlTexture) {
-			std::cerr << "Failed to create texture: " << SDL_GetError() << std::endl;
-			return false;
-		}*/
-
         SDL_Texture* sdlTexture = m_textureCache[surface->getPath()];
         if (!sdlTexture) {
             std::cerr << "Failed to get texture from cache" << std::endl;
@@ -126,7 +112,6 @@ bool Window::update() {
 			static_cast<int>(surface->getBaseHeight() * TILE_SIZE * zoomFactor)
 		};
 		SDL_RenderCopy(m_renderer, sdlTexture, nullptr, &rect);
-		//SDL_DestroyTexture(sdlTexture);
 	}
 
 	// Present the rendered frame to the screen
@@ -138,6 +123,11 @@ bool Window::update() {
 bool Window::handleEvents()
 {
     LevelLoader levelLoader;
+
+	double zoomFactor = m_camera->getZoom();
+	Vector2D center = m_camera->getCenter();
+	int offsetX = static_cast<int>(m_camera->getCenter().x * TILE_SIZE * zoomFactor + m_windowWidth / 2);
+	int offsetY = static_cast<int>(m_camera->getCenter().y * TILE_SIZE * zoomFactor + m_windowHeight / 2);
 
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
@@ -155,10 +145,29 @@ bool Window::handleEvents()
 			std::cout << "Zoom: " << m_camera->getZoom() << std::endl;
 		}
 		else if (event.type == SDL_MOUSEBUTTONDOWN) {
-			m_mouseHandler->handleMouseButtonDown(event);
+			if (event.button.button == SDL_BUTTON_MIDDLE)
+				m_mouseHandler->handleMouseButtonDown(event);
+            else if (event.button.button == SDL_BUTTON_LEFT) {
+                // Testing Code for adding a texture to the texture buffer with a mouse click
+				int adjustedX = event.button.x - offsetX;
+				int adjustedY = event.button.y - offsetY;
+
+				int snappedX = static_cast<int>(std::floor(adjustedX / 16.0));
+				int snappedY = static_cast<int>(std::floor(adjustedY / 16.0));
+
+				std::cout << "Mouse click at: " << adjustedX << ", " << adjustedY << std::endl;
+				std::cout << "Mouse click snapped to tile: " << snappedX << ", " << snappedY << std::endl;
+
+				std::string type = "dirt";
+
+				std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/" + type + ".png", 1, 1, snappedX, snappedY);
+                Game::getInstance().bufferizeSurface(std::move(s));
+                loadTextures();
+            }
 		}
 		else if (event.type == SDL_MOUSEBUTTONUP) {
-			m_mouseHandler->handleMouseButtonUp(event);
+			if (event.button.button == SDL_BUTTON_MIDDLE)
+				m_mouseHandler->handleMouseButtonUp(event);
 		}
 		else if (event.type == SDL_MOUSEMOTION) {
 			m_mouseHandler->handleMouseMotion(event);
@@ -173,7 +182,7 @@ bool Window::handleEvents()
 
 		if (event.type == SDL_KEYDOWN) {
 			if (event.key.keysym.sym == SDLK_g) {
-				levelLoader.loadLevel("testLevel");
+				levelLoader.loadLevel("testLevel2");
                 loadTextures();
 			}
 		}
