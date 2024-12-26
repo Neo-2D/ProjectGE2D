@@ -18,7 +18,7 @@
 
 class EventHandler;
 
-class Window : public GameObject {
+class Window {
 private:
 	bool m_sdlInitialized = false;
 	bool m_sdlImageInitialized = false;
@@ -42,8 +42,8 @@ public:
 	Window(SurfaceBuffer&);
 	virtual ~Window();
 	
-	virtual bool init() override;
-	virtual bool update() override;
+	virtual bool init();
+	virtual bool draw();
     void loadTextures();
 
 	// Returns false if the window should close
@@ -54,4 +54,6 @@ public:
     void setHeight(int height) { m_windowHeight = height; }
     int getWidth() const { return m_windowWidth; }
     int getHeight() const { return m_windowHeight; }
+
+    Camera& getCamera() { return *m_camera; }
 };

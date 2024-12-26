@@ -9,7 +9,7 @@ private:
 public:
 	Camera();
 	
-	int getZoom() const;
+	float getZoom() const;
 	void setZoom(int zoom);
 	void zoomIn();
 	void zoomOut();

@@ -1,5 +1,10 @@
 #include "EventHandler.hpp"
 
+EventHandler::EventHandler(Window& window, Camera& camera, MouseHandler& mouseHandler)
+    : m_window(window), m_camera(camera), m_mouseHandler(mouseHandler) {
+
+}
+
 bool EventHandler::handleEvent(const SDL_Event& event) {
     switch (event.type) {
     case SDL_QUIT:
@@ -85,6 +90,7 @@ void EventHandler::handleKeyDown(const SDL_Event& event) {
     if (event.key.keysym.sym == SDLK_l) {
         std::cout << "Loading level: " << "testLevel" << std::endl;
         LevelLoader::getInstance().loadLevel("testLevel");
+        m_window.getCamera().setCenter(Vector2D(0, 0));
         m_window.loadTextures();
     }
     else if (event.key.keysym.sym == SDLK_s) {

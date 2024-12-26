@@ -139,6 +139,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="MouseHandler.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="SurfaceBuffer.hpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="GameObject.hpp" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="LevelLoader.hpp" />
+    <ClInclude Include="MapEditor.hpp" />
     <ClInclude Include="MouseHandler.hpp" />
     <ClInclude Include="Surface.hpp" />
     <ClInclude Include="Tile.hpp" />

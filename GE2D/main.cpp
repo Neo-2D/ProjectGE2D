@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
 			return 1;
 		}
 
-		bool windowUpdated = window.update();
+		bool windowUpdated = window.draw();
 		if (!windowUpdated) {
 			std::cerr << "Failed to update window" << std::endl;
 			return 1;

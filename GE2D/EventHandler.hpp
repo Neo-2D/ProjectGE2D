@@ -3,6 +3,7 @@
 #include "Camera.hpp"
 #include "MouseHandler.hpp"
 #include "LevelLoader.hpp"
+#include "MapEditor.hpp"
 
 #include <SDL.h>
 
@@ -10,9 +11,7 @@ class Window;
 
 class EventHandler {
 public:
-    EventHandler(Window& window, Camera& camera, MouseHandler& mouseHandler)
-        : m_window(window), m_camera(camera), m_mouseHandler(mouseHandler) {
-    }
+    EventHandler(Window& window, Camera& camera, MouseHandler& mouseHandler);
 
     bool handleEvent(const SDL_Event& event);
 

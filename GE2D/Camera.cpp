@@ -5,7 +5,7 @@ Camera::Camera()
 	m_zoom = 1;
 }
 
-int Camera::getZoom() const
+float Camera::getZoom() const
 {
 	return m_zoom;
 }
@@ -17,13 +17,13 @@ void Camera::setZoom(int zoom)
 
 void Camera::zoomIn()
 {
-	m_zoom += 2;
+	m_zoom *= 1.1f;
 }
 
 void Camera::zoomOut()
 {
 	if (m_zoom > 1) {
-		m_zoom -= 2;
+		m_zoom /= 1.1;
 	}
 }
 

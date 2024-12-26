@@ -85,7 +85,7 @@ void Window::loadTextures() {
 	}
 }
 
-bool Window::update() {
+bool Window::draw() {
 	// Clear the screen (optional, based on your needs)
 	SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
 	SDL_RenderClear(m_renderer);
@@ -137,7 +137,7 @@ bool Window::handleEvents()
 
 void Window::handleMouseDrag(double dx, double dy) {
 	m_camera->setCenter(
-		{ float(m_camera->getCenter().x + dx / (TILE_SIZE)),
-		float(m_camera->getCenter().y + dy / (TILE_SIZE)) }
+		{ float(m_camera->getCenter().x + dx / (TILE_SIZE * m_camera->getZoom())),
+		float(m_camera->getCenter().y + dy / (TILE_SIZE * m_camera->getZoom())) }
 	);
 }
