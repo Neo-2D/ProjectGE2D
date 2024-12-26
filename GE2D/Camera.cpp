@@ -17,13 +17,13 @@ void Camera::setZoom(int zoom)
 
 void Camera::zoomIn()
 {
-	m_zoom += 3;
+	m_zoom += 2;
 }
 
 void Camera::zoomOut()
 {
 	if (m_zoom > 1) {
-		m_zoom -= 3;
+		m_zoom -= 2;
 	}
 }
 

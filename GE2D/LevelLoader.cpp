@@ -1,15 +1,6 @@
 #include "LevelLoader.hpp"
 using json = nlohmann::json;
 
-LevelLoader::LevelLoader()
-{
-}
-
-LevelLoader::~LevelLoader()
-{
-}
-
-
 
 /*JSON Level format
 * {
@@ -34,14 +25,35 @@ void LevelLoader::loadLevel(const std::string& levelName)
 
     std::ifstream file("assets/levels/" + levelName + ".json");
     json data = json::parse(file);
+    loadedLevel = levelName;
 
     for (auto& tile : data["tiles"]) {
         std::string type = tile["type"];
         int x = tile["x"];
         int y = tile["y"];
-        std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/" + type + ".png", 1, 1, x, y);
+        std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/" + type + ".png", 1, 1, x, y, type);
         Game::getInstance().bufferizeSurface(std::move(s));
     }
 
     file.close();
+    std::cout << "Loaded level: " << levelName << std::endl;
+}
+
+void LevelLoader::saveLevel()
+{
+    std::string levelName = loadedLevel;
+    json data;
+    data["tiles"] = json::array();
+    const auto& surfaces = Game::getInstance().getSurfaceBuffer();
+    for (const auto& surface : surfaces) {
+        json tile;
+        tile["type"] = surface->getType();
+        tile["x"] = surface->getX();
+        tile["y"] = surface->getY();
+        data["tiles"].push_back(tile);
+    }
+    std::ofstream file("assets/levels/" + levelName + ".json");
+    file << data.dump(4);
+    file.close();
+    std::cout << "Saved level: " << levelName << std::endl;
 }

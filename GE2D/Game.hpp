@@ -3,6 +3,7 @@
 #include "GameObject.hpp"
 #include "Surface.hpp"
 #include "SurfaceBuffer.hpp"
+#include "LevelLoader.hpp"
 #include <vector>
 #include <memory>
 

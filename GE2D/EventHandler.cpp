@@ -41,7 +41,7 @@ void EventHandler::handleMouseMotion(const SDL_Event& event) {
         int snappedY = static_cast<int>(std::floor(adjustedY / (TILE_SIZE * zoomFactor)));
 
         std::string type = "dirt";
-        std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/" + type + ".png", 1, 1, snappedX, snappedY);
+        std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/" + type + ".png", 1, 1, snappedX, snappedY, type);
         Game::getInstance().bufferizeSurface(std::move(s));
         m_window.loadTextures();
     }
@@ -78,10 +78,21 @@ void EventHandler::handleMouseWheel(const SDL_Event& event) {
     std::cout << "Zoom: " << m_camera.getZoom() << std::endl;
 }
 
+#include <thread>
+#include <chrono>
+
 void EventHandler::handleKeyDown(const SDL_Event& event) {
-    if (event.key.keysym.sym == SDLK_g) {
-        LevelLoader::loadLevel("testLevel2");
+    if (event.key.keysym.sym == SDLK_l) {
+        static int levelNumber = 0;
+
+        std::string levelToLoad = "testLevel" + std::to_string(levelNumber);
+        std::cout << "Loading level: " << levelToLoad << std::endl;
+        LevelLoader::getInstance().loadLevel(levelToLoad);
         m_window.loadTextures();
+        levelNumber = (levelNumber + 1) % 2;
+    }
+    else if (event.key.keysym.sym == SDLK_s) {
+        LevelLoader::getInstance().saveLevel();
     }
 }
 

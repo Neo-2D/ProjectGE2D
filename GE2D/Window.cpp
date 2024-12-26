@@ -136,7 +136,6 @@ bool Window::handleEvents()
 }
 
 void Window::handleMouseDrag(double dx, double dy) {
-	std::cout << "Mouse drag: " << dx << ", " << dy << std::endl;
 	m_camera->setCenter(
 		{ float(m_camera->getCenter().x + dx / (TILE_SIZE)),
 		float(m_camera->getCenter().y + dy / (TILE_SIZE)) }

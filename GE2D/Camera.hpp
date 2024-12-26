@@ -3,7 +3,7 @@
 
 class Camera {
 private:
-	int m_zoom;
+	float m_zoom;
 	Vector2D m_center = { 0, 0 };
 
 public:

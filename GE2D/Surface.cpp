@@ -1,7 +1,7 @@
 #include "Surface.hpp"
 
-Surface::Surface(const std::string& path, const int baseWidth, const int baseHeight, const float x, const float y)
-	: m_path(path), m_baseWidth(baseWidth), m_baseHeight(baseHeight), m_x(x), m_y(y) {}
+Surface::Surface(const std::string& path, const int baseWidth, const int baseHeight, const float x, const float y, std::string type)
+	: m_path(path), m_baseWidth(baseWidth), m_baseHeight(baseHeight), m_x(x), m_y(y), m_type(type) {}
 
 const std::string& Surface::getPath() const {
 	return m_path;
@@ -25,4 +25,9 @@ float Surface::getX() const
 float Surface::getY() const
 {
 	return m_y;
+}
+
+std::string Surface::getType() const
+{
+	return m_type;
 }
