@@ -83,13 +83,9 @@ void EventHandler::handleMouseWheel(const SDL_Event& event) {
 
 void EventHandler::handleKeyDown(const SDL_Event& event) {
     if (event.key.keysym.sym == SDLK_l) {
-        static int levelNumber = 0;
-
-        std::string levelToLoad = "testLevel" + std::to_string(levelNumber);
-        std::cout << "Loading level: " << levelToLoad << std::endl;
-        LevelLoader::getInstance().loadLevel(levelToLoad);
+        std::cout << "Loading level: " << "testLevel" << std::endl;
+        LevelLoader::getInstance().loadLevel("testLevel");
         m_window.loadTextures();
-        levelNumber = (levelNumber + 1) % 2;
     }
     else if (event.key.keysym.sym == SDLK_s) {
         LevelLoader::getInstance().saveLevel();
