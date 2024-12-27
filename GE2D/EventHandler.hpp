@@ -8,6 +8,7 @@
 #include <SDL.h>
 
 class Window;
+class MapEditor;
 
 class EventHandler {
 public:
@@ -19,6 +20,7 @@ private:
     Window& m_window;
     Camera& m_camera;
     MouseHandler& m_mouseHandler;
+    std::unique_ptr<MapEditor> m_mapEditor;
     bool isMouseHeldDown = false;
 
     void handleMouseMotion(const SDL_Event& event);

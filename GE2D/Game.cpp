@@ -18,6 +18,11 @@ bool Game::init()
 
 void Game::bufferizeSurface(std::unique_ptr<Surface>&& surface)
 {
+    for (const auto& s : m_surfaceBuffer) {
+        if (s->getX() == surface->getX() && s->getY() == surface->getY()) {
+            return;
+        }
+    }
 	m_surfaceBuffer.push_back(std::move(surface));
 }
 

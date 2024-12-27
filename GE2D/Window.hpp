@@ -5,6 +5,7 @@
 #include "Camera.hpp"
 #include "MouseHandler.hpp"
 #include "EventHandler.hpp"
+#include "MapEditor.hpp"
 
 #include <iostream>
 #include <SDL.h>
@@ -16,6 +17,7 @@
 
 #define TILE_SIZE 16
 
+class MapEditor;
 class EventHandler;
 
 class Window {
