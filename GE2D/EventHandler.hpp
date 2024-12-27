@@ -21,7 +21,8 @@ private:
     Camera& m_camera;
     MouseHandler& m_mouseHandler;
     std::unique_ptr<MapEditor> m_mapEditor;
-    bool isMouseHeldDown = false;
+    bool isLeftMouseHeldDown = false;
+    bool isRightMouseHeldDown = false;
 
     void handleMouseMotion(const SDL_Event& event);
     void handleMouseButtonDown(const SDL_Event& event);

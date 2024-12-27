@@ -21,6 +21,10 @@ using json = nlohmann::json;
 
 void LevelLoader::loadLevel(const std::string& levelName)
 {
+    std::cout << "Loading level: " << levelName << std::endl;
+    //Count time to load level
+    auto start = std::chrono::high_resolution_clock::now();
+
     Game::getInstance().clearSurfaceBuffer();
 
     std::ifstream file("assets/levels/" + levelName + ".json");
@@ -31,12 +35,15 @@ void LevelLoader::loadLevel(const std::string& levelName)
         std::string type = tile["type"];
         int x = tile["x"];
         int y = tile["y"];
-        std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/" + type + ".png", 1, 1, x, y, type);
+        std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/textures/tiles/" + type + ".png", 1, 1, x, y, type);
         Game::getInstance().bufferizeSurface(std::move(s));
     }
 
     file.close();
-    std::cout << "Loaded level: " << levelName << std::endl;
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "Loaded level: " << levelName << " in " << duration.count() << " seconds" << std::endl;
 }
 
 void LevelLoader::saveLevel()

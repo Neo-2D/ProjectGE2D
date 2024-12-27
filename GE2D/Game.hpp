@@ -26,5 +26,6 @@ public:
 
 	virtual void bufferizeSurface(std::unique_ptr<Surface>&& surface) override;
 	virtual void clearSurfaceBuffer() override;
+    void eraseSurface(int x, int y);
 	virtual const std::vector<std::unique_ptr<Surface>>& getSurfaceBuffer() const override;
 };

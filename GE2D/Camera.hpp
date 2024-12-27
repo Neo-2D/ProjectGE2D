@@ -10,7 +10,7 @@ public:
 	Camera();
 	
 	float getZoom() const;
-	void setZoom(int zoom);
+	void setZoom(float zoom);
 	void zoomIn();
 	void zoomOut();
 

@@ -20,4 +20,6 @@ public:
 	float getX() const;
 	float getY() const;
     std::string getType() const;
+
+    bool operator==(const Surface& other) const;
 };

@@ -31,3 +31,12 @@ std::string Surface::getType() const
 {
 	return m_type;
 }
+
+bool Surface::operator==(const Surface& other) const
+{
+    if (m_x == other.m_x && m_y == other.m_y && m_type == other.m_type)
+    {
+        return true;
+    }
+	return false;
+}

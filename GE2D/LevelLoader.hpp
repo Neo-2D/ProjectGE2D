@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <chrono>
 #include "Game.hpp"
 #include "nlohmann/json.hpp"
 

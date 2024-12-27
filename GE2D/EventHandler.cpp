@@ -34,30 +34,47 @@ bool EventHandler::handleEvent(const SDL_Event& event) {
 }
 
 void EventHandler::handleMouseMotion(const SDL_Event& event) {
-    if (isMouseHeldDown) {
-
-        m_mapEditor->paint(event.motion.x, event.motion.y, "dirt");
+    if (isLeftMouseHeldDown) {
+        m_mapEditor->paint(event.motion.x, event.motion.y);
+    }
+    else if (isRightMouseHeldDown) {
+        m_mapEditor->erase(event.motion.x, event.motion.y);
     }
 
     m_mouseHandler.handleMouseMotion(event);
 }
 
 void EventHandler::handleMouseButtonDown(const SDL_Event& event) {
-    if (event.button.button == SDL_BUTTON_MIDDLE) {
+    switch (event.button.button) {
+    case SDL_BUTTON_LEFT:
+        isLeftMouseHeldDown = true;
+        m_mapEditor->paint(event.button.x, event.button.y);
+        break;
+    case SDL_BUTTON_RIGHT:
+        isRightMouseHeldDown = true;
+        m_mapEditor->erase(event.button.x, event.button.y);
+        break;
+    case SDL_BUTTON_MIDDLE:
         m_mouseHandler.handleMouseButtonDown(event);
-    }
-    else if (event.button.button == SDL_BUTTON_LEFT) {
-        isMouseHeldDown = true;
-        m_mapEditor->paint(event.button.x, event.button.y, "dirt");
+        break;
+    default:
+        break;
     }
 }
 
 void EventHandler::handleMouseButtonUp(const SDL_Event& event) {
-    if (event.button.button == SDL_BUTTON_MIDDLE) {
+    switch (event.button.button) {
+    case SDL_BUTTON_LEFT:
+        isLeftMouseHeldDown = false;
+        break;
+    case SDL_BUTTON_RIGHT:
+        isRightMouseHeldDown = false;
+        break;
+    case SDL_BUTTON_MIDDLE:
         m_mouseHandler.handleMouseButtonUp(event);
-    }
-    else if (event.button.button == SDL_BUTTON_LEFT) {
-        isMouseHeldDown = false;
+        break;
+    default:
+        break;
     }
 }
 
@@ -68,21 +85,26 @@ void EventHandler::handleMouseWheel(const SDL_Event& event) {
     else {
         m_camera.zoomOut();
     }
-    std::cout << "Zoom: " << m_camera.getZoom() << std::endl;
 }
 
-#include <thread>
-#include <chrono>
-
 void EventHandler::handleKeyDown(const SDL_Event& event) {
-    if (event.key.keysym.sym == SDLK_l) {
-        std::cout << "Loading level: " << "testLevel" << std::endl;
+    switch (event.key.keysym.sym) {
+    case SDLK_l:
         LevelLoader::getInstance().loadLevel("testLevel");
         m_window.getCamera().setCenter(Vector2D(0, 0));
         m_window.loadTextures();
-    }
-    else if (event.key.keysym.sym == SDLK_s) {
+        break;
+    case SDLK_s:
         LevelLoader::getInstance().saveLevel();
+        break;
+    case SDLK_UP:
+        m_mapEditor->nextPaintType();
+        break;
+    case SDLK_DOWN:
+        m_mapEditor->previousPaintType();
+        break;
+    default:
+        break;
     }
 }
 

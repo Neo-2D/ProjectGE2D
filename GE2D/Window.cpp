@@ -94,8 +94,8 @@ bool Window::draw() {
 	//double zoomFactor = m_camera->getZoom() / 16.0f + 1;
 	double zoomFactor = m_camera->getZoom();
     Vector2D center = m_camera->getCenter();
-	int offsetX = static_cast<int>(m_camera->getCenter().x * TILE_SIZE * zoomFactor + m_windowWidth / 2);
-	int offsetY = static_cast<int>(m_camera->getCenter().y * TILE_SIZE * zoomFactor + m_windowHeight / 2);
+	int offsetX = static_cast<int>(m_camera->getCenter().x * TILE_SIZE * zoomFactor + m_windowWidth / 2.0f);
+	int offsetY = static_cast<int>(m_camera->getCenter().y * TILE_SIZE * zoomFactor + m_windowHeight / 2.0f);
 
 	// Draw surfaces from SurfaceBuffer
 	const std::vector<std::unique_ptr<Surface>>& surfaces = m_surfaceBuffer.getSurfaceBuffer();

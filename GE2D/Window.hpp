@@ -12,10 +12,10 @@
 #include <SDL_image.h>
 #include <unordered_map>
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+constexpr int WINDOW_WIDTH = 800;
+constexpr int WINDOW_HEIGHT = 600;
 
-#define TILE_SIZE 16
+constexpr int TILE_SIZE = 16;
 
 class MapEditor;
 class EventHandler;
