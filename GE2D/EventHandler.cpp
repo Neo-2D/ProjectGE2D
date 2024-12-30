@@ -88,6 +88,8 @@ void EventHandler::handleMouseWheel(const SDL_Event& event) {
 }
 
 void EventHandler::handleKeyDown(const SDL_Event& event) {
+    const Uint8* state = SDL_GetKeyboardState(NULL); // Get the current state of all keys
+
     switch (event.key.keysym.sym) {
     case SDLK_l:
         LevelLoader::getInstance().loadLevel("testLevel");
@@ -102,6 +104,11 @@ void EventHandler::handleKeyDown(const SDL_Event& event) {
         break;
     case SDLK_DOWN:
         m_mapEditor->previousPaintType();
+        break;
+    case SDLK_z:
+        if (state[SDL_SCANCODE_LCTRL] || state[SDL_SCANCODE_RCTRL]) {
+            m_mapEditor->undo();
+        }
         break;
     default:
         break;

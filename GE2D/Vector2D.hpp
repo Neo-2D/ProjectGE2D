@@ -18,8 +18,7 @@ public:
 	Vector2D operator/(const float scalar) const;
 
 	bool equals(const Vector2D& other) const;
-	bool operator==(const Vector2D& other) const = delete;
-	bool operator!=(const Vector2D& other) const = delete;
+	bool operator==(const Vector2D& other) const;
 
 	Vector2D& operator+=(const Vector2D& other);
 	Vector2D& operator-=(const Vector2D& other);

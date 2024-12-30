@@ -28,6 +28,12 @@
     <Filter Include="Source Files\math">
       <UniqueIdentifier>{392a62de-fcef-4637-ba51-8e92264914af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\commands">
+      <UniqueIdentifier>{a7071b1e-91b7-473d-91ec-c372b8a47c8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\commands">
+      <UniqueIdentifier>{74273022-b06c-429d-8008-2af612da3b3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,6 +71,12 @@
     </ClCompile>
     <ClCompile Include="MapEditor.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PaintCommand.cpp">
+      <Filter>Source Files\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="EraseCommand.cpp">
+      <Filter>Source Files\commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +124,15 @@
     </ClInclude>
     <ClInclude Include="MapEditor.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PaintCommand.hpp">
+      <Filter>Header Files\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="EraseCommand.hpp">
+      <Filter>Header Files\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.hpp">
+      <Filter>Header Files\commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

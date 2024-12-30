@@ -32,16 +32,47 @@ void MapEditor::paint(double x, double y)
 {
     Vector2D snapped = getSnappedCoordinates(x, y);
 
-    std::unique_ptr<Surface> s = std::make_unique<Surface>("assets/textures/tiles/" + m_currentPaintType + ".png", 1, 1, snapped.x, snapped.y, m_currentPaintType);
-    Game::getInstance().bufferizeSurface(std::move(s));
-    m_window.loadTextures();
+    std::unique_ptr<Command> command = std::make_unique<PaintCommand>(*this, snapped, m_currentPaintType);
+    command->execute();
+    addToUndoStack(std::move(command));
+    
 }
 
 void MapEditor::erase(double x, double y)
 {
     Vector2D snapped = getSnappedCoordinates(x, y);
-    Game::getInstance().eraseSurface(snapped.x, snapped.y);
-    m_window.loadTextures();
+
+    //get paint type at coordinates
+    //std::string paintType = m_window.getSurfaceAt(snapped.x, snapped.y)->getType();
+    //if (paintType == "") {
+    //    return;
+    //}
+
+    std::unique_ptr<Command> command = std::make_unique<EraseCommand>(*this, snapped, m_currentPaintType);
+    //std::unique_ptr<Command> command = std::make_unique<EraseCommand>(*this, snapped, paintType);
+    
+    command->execute();
+    addToUndoStack(std::move(command));
+    
+}
+
+void MapEditor::undo()
+{
+    if (!m_undoStack.empty()) {
+        m_undoStack.top()->undo();
+        std::cout << "Undoing command: " << typeid(*m_undoStack.top()).name() << std::endl;
+        m_undoStack.pop();
+    }
+}
+
+void MapEditor::addToUndoStack(std::unique_ptr<Command>&& command)
+{
+    if (m_undoStack.empty()) {
+        m_undoStack.push(std::move(command));
+    }
+    else if (*command.get() != *m_undoStack.top().get()) {
+        m_undoStack.push(std::move(command));
+    }
 }
 
 Vector2D MapEditor::getSnappedCoordinates(double x, double y) const

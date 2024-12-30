@@ -56,6 +56,11 @@ Vector2D& Vector2D::operator/=(const float scalar)
 	return *this;
 }
 
+bool Vector2D::operator==(const Vector2D& other) const
+{
+    return x == other.x && y == other.y;
+}
+
 float Vector2D::dot(const Vector2D& other) const
 {
 	return x * other.x + y * other.y;

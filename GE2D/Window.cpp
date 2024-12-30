@@ -65,24 +65,34 @@ bool Window::init()
 
 void Window::loadTextures() {
     m_textureCache.clear();
-	const auto& surfaces = m_surfaceBuffer.getSurfaceBuffer();
-	for (const auto& surface : surfaces) {
-		const std::string& path = surface->getPath();
-		if (m_textureCache.find(path) == m_textureCache.end()) {
-			SDL_Surface* sdlSurface = IMG_Load(path.c_str());
-			if (!sdlSurface) {
-				std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
-				continue;
-			}
-			SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, sdlSurface);
-			SDL_FreeSurface(sdlSurface);
-			if (!texture) {
-				std::cerr << "Failed to create texture: " << SDL_GetError() << std::endl;
-				continue;
-			}
-			m_textureCache[path] = texture;
-		}
-	}
+
+    //do the same thing but iterate over everything in assets/textures/tiles
+    std::string directory = "assets/textures/tiles";
+
+    namespace fs = std::filesystem;
+
+    for (const auto& entry : fs::directory_iterator(directory)) {
+        if (entry.is_regular_file()) {
+            std::string filename = entry.path().filename().string();
+            if (filename.ends_with(".png")) {
+				std::string path = "assets/textures/tiles/" + filename;
+                if (m_textureCache.find(path) == m_textureCache.end()) {
+                    SDL_Surface* sdlSurface = IMG_Load(path.c_str());
+                    if (!sdlSurface) {
+                        std::cerr << "Failed to load image: " << IMG_GetError() << std::endl;
+                        continue;
+                    }
+                    SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, sdlSurface);
+                    SDL_FreeSurface(sdlSurface);
+                    if (!texture) {
+                        std::cerr << "Failed to create texture: " << SDL_GetError() << std::endl;
+                        continue;
+                    }
+                    m_textureCache[path] = texture;
+                }
+            }
+        }
+    }
 }
 
 bool Window::draw() {

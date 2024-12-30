@@ -136,12 +136,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="EraseCommand.cpp" />
     <ClCompile Include="EventHandler.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="MouseHandler.cpp" />
+    <ClCompile Include="PaintCommand.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="SurfaceBuffer.hpp" />
     <ClCompile Include="Tile.cpp" />
@@ -157,6 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="Command.hpp" />
+    <ClInclude Include="EraseCommand.hpp" />
     <ClInclude Include="EventHandler.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameObject.hpp" />
@@ -164,6 +168,7 @@
     <ClInclude Include="LevelLoader.hpp" />
     <ClInclude Include="MapEditor.hpp" />
     <ClInclude Include="MouseHandler.hpp" />
+    <ClInclude Include="PaintCommand.hpp" />
     <ClInclude Include="Surface.hpp" />
     <ClInclude Include="Tile.hpp" />
     <ClInclude Include="Vector2D.hpp" />
